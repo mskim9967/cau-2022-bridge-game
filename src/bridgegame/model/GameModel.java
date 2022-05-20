@@ -2,12 +2,12 @@ package bridgegame.model;
 
 import lombok.Data;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static bridgegame.constant.BoardConstant.*;
+import static bridgegame.constant.ViewConstant.STATIC_PATH;
 
 
 @Data
@@ -91,5 +91,27 @@ public class GameModel {
 
   public Integer rollDice() {
     return dice = new Random().nextInt(6) + 1;
+  }
+
+
+  public List<Integer> getWinners() {
+    List<Integer> winners = new ArrayList<>();
+    winners.add(1);
+    Integer max = -1;
+    for (PlayerModel player :  players.values())
+      if (player.getScore() >= max) {
+        if (player.getScore() != max) {
+          winners.clear();
+          max = player.getScore();
+        }
+        winners.add(player.getId());
+      }
+    return winners;
+  }
+
+
+  public static String[] getMapFileNames() {
+    File mapDir = new File(String.format("%s/map", STATIC_PATH.getStr()));
+    return Arrays.stream(mapDir.list()).filter(s -> s.matches("(.*/)*.+\\.map$")).toArray(String[]::new);
   }
 }

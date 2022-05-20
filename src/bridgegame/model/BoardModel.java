@@ -26,7 +26,7 @@ public class BoardModel {
     FileReader fileReader = new FileReader(mapFilePath);
     BufferedReader bufReader = new BufferedReader(fileReader);
     String line = null;
-    Character nextDir = null;
+    Character nextDir;
     boolean isFirstLine = true;
 
     while ((line = bufReader.readLine()) != null) {

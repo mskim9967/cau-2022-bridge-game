@@ -13,7 +13,9 @@ public enum ViewConstant {
   CELL_ROW_CNT("20"),
   CELL_COL_CNT("20"),
 
-  WINDOW_TITLE("Bridge Game");
+  WINDOW_TITLE("Bridge Game"),
+
+  STATIC_PATH(String.format("%s/static", System.getProperty("user.dir")));
 
 
   private final String value;

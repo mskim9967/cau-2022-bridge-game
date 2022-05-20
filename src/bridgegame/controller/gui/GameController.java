@@ -2,7 +2,6 @@ package bridgegame.controller.gui;
 
 import bridgegame.constant.BoardConstant;
 import bridgegame.constant.ViewConstant;
-import bridgegame.controller.gui.MenuController;
 import bridgegame.model.Coord;
 import bridgegame.model.GameModel;
 import bridgegame.model.PlayerModel;
@@ -22,11 +21,10 @@ import javafx.scene.layout.*;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
+import static bridgegame.constant.ViewConstant.STATIC_PATH;
 
 public class GameController implements Initializable {
 
@@ -56,7 +54,6 @@ public class GameController implements Initializable {
       startCoord = new Coord(0, 3);
       game = new GameModel(getPlayerCntFromDialog(), getMapPathFromDialog(), startCoord);
       drawInit();
-
     } catch (IOException e) {
       System.out.println("view file not found");
     }
@@ -86,13 +83,13 @@ public class GameController implements Initializable {
       } catch (Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
-        if (e.getMessage() == "command")
+        if (e.getMessage().equals("command"))
           alert.setContentText("Invalid command (R/L/U/D)");
-        else if (e.getMessage() == "direction")
+        else if (e.getMessage().equals("direction"))
           alert.setContentText("You can't go to backward");
-        else if (e.getMessage() == "length")
+        else if (e.getMessage().equals("length"))
           alert.setContentText("Command length is invalid");
-        else if (e.getMessage() == "outofboard")
+        else if (e.getMessage().equals("outofboard"))
           alert.setContentText("Command is not in board");
         alert.showAndWait();
         return;
@@ -161,13 +158,10 @@ public class GameController implements Initializable {
 
   private String getMapPathFromDialog() {
 
-    File mapDir = new File(String.format("%s/static/map", System.getProperty("user.dir")));
-    String[] mapFileNames = mapDir.list();
-    mapFileNames = Arrays.stream(mapFileNames).filter(s -> s.matches("(.*/)*.+\\.map$")).toArray(String[]::new);
-
+    String[] mapFileNames = GameModel.getMapFileNames();
     ChoiceDialog fileNameDg = new ChoiceDialog("default.map", mapFileNames);
     fileNameDg.setHeaderText("Select map file");
-    return String.format("%s/static/map/%s", System.getProperty("user.dir"), fileNameDg.showAndWait().get());
+    return String.format("%s/map/%s", STATIC_PATH.getStr(), fileNameDg.showAndWait().get());
   }
 
 
@@ -193,8 +187,6 @@ public class GameController implements Initializable {
   private void drawBoard() throws IOException {
 
     boardPane.setMaxSize(ViewConstant.BOARD_WIDTH.getInt(), ViewConstant.BOARD_HEIGHT.getInt());
-//    boardPane.setGridLinesVisible(true);
-
 
     // set cell size
     RowConstraints rc = new RowConstraints();
@@ -252,20 +244,9 @@ public class GameController implements Initializable {
       if (!game.changeTurn()) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game End");
-        List<Integer> winners = new ArrayList<>();
-        winners.add(1);
-        int max = -1;
-        for (PlayerModel player : game.getPlayers().values())
-          if (player.getScore() >= max) {
-            if (player.getScore() != max) {
-              winners.clear();
-              max = player.getScore();
-            }
-            winners.add(player.getId());
-          }
 
         alert.setContentText(String.format("Player %s Win!",
-            winners.stream().map(s -> String.valueOf(s)).collect(Collectors.joining(", "))));
+            game.getWinners().stream().map(String::valueOf).collect(Collectors.joining(", "))));
 
         StringBuilder result = new StringBuilder();
         for (PlayerModel player : game.getPlayers().values())
