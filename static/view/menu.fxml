@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane fx:id="pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="bridgegame.controller.gui.MenuController"
+>
+    <center>
+        <VBox alignment="CENTER" spacing="10.0" prefHeight="200.0" prefWidth="300.0">
+            <children>
+                <Label style="-fx-font-size: 40">Bridge Game</Label>
+                <Button fx:id="gameStartBtn" text="New Game" />
+                <Button fx:id="exitBtn" text="Exit" />
+            </children>
+        </VBox>
+
+    </center>
+
+
+</BorderPane>

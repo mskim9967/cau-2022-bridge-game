@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<?import javafx.scene.image.ImageView?>
+<BorderPane fx:id="pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="bridgegame.controller.gui.GameController"
+>
+
+    <center>
+        <GridPane fx:id="boardPane">
+
+        </GridPane>
+    </center>
+    <right>
+
+        <VBox alignment="CENTER" spacing="40" prefWidth="200">
+            <children>
+
+                <GridPane fx:id="scorePane" alignment="CENTER" hgap="20" vgap="10">
+
+                </GridPane>
+
+                <VBox alignment="CENTER">
+                    <Label style="-fx-font-size: 24">Player</Label>
+                    <Label fx:id="turnLbl"/>
+                    <Label style="-fx-font-size: 24">turn</Label>
+                </VBox>
+
+                <Label fx:id="bridgeCardLbl" style="-fx-font-size: 20; -fx-text-fill: #F00"/>
+
+                <VBox alignment="CENTER" spacing="10">
+                    <children>
+                        <ImageView fx:id="diceView" fitWidth="140" fitHeight="140" />
+                        <Button fx:id="rollDiceBtn" text="Roll!"/>
+                    </children>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="10">
+                    <children>
+                        <Label fx:id="movableCntLbl"/>
+                        <TextField fx:id="cmdTfd" disable="true" maxWidth="100"/>
+                        <HBox alignment="CENTER" spacing="10">
+                            <children>
+                                <Button fx:id="passBtn" text="Pass turn" disable="true"/>
+                                <Button fx:id="cmdBtn" text="Submit" disable="true"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <Button fx:id="exitBtn" text="EXIT" focusTraversable="false"/>
+
+            </children>
+        </VBox>
+    </right>
+
+
+</BorderPane>
