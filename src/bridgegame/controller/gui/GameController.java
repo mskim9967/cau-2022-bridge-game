@@ -59,7 +59,8 @@ public class GameController implements Initializable {
     }
 
 
-    // handler
+    /*---------------- handler ----------------*/
+
     exitBtn.setOnAction(ActionEvent -> {
       try {
         pane.getScene().setRoot(MenuController.getRoot());
@@ -70,14 +71,17 @@ public class GameController implements Initializable {
 
     passBtn.setOnAction(ActionEvent -> {
       game.passTurn();
-      drawBeforeChangePlayer();
+      drawBeforeChangeTurn();
     });
 
     cmdTfd.setOnKeyPressed(event -> {
+      // when command is written and enter key is pressed
       if (event.getCode() == KeyCode.ENTER) cmdBtn.fire();
     });
 
     cmdBtn.setOnAction(ActionEvent -> {
+      // 1. move player
+      // 2. if exception occurs, command is not valid, so do rollback
       try {
         game.movePlayer(cmdTfd.getText(), game.getDice() - game.getCurrentPlayer().getBridgeCard());
       } catch (Exception e) {
@@ -97,6 +101,7 @@ public class GameController implements Initializable {
 
       BoardConstant currentCell = game.getBoard().getCell(game.getCurrentPlayer().getCoord());
 
+      // alert item's score when player gets an item
       if (currentCell != BoardConstant.START && currentCell != BoardConstant.CELL && currentCell != BoardConstant.BRIDGE_START && currentCell != BoardConstant.BRIDGE_END) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -112,7 +117,7 @@ public class GameController implements Initializable {
         alert.showAndWait();
       }
 
-      drawBeforeChangePlayer();
+      drawBeforeChangeTurn();
     });
 
     rollDiceBtn.setOnAction(ActionEvent -> {
@@ -121,6 +126,8 @@ public class GameController implements Initializable {
       movableCntLbl.setText(String.format("You can move %s times", Math.max(0, game.getDice() - game.getCurrentPlayer().getBridgeCard())));
       rollDiceBtn.setDisable(true);
       passBtn.setDisable(false);
+
+      // if player can't move, disable ui
       if (game.getDice() > game.getCurrentPlayer().getBridgeCard()) {
         cmdBtn.setDisable(false);
         cmdTfd.setDisable(false);
@@ -164,6 +171,8 @@ public class GameController implements Initializable {
     return String.format("%s/map/%s", STATIC_PATH.getStr(), fileNameDg.showAndWait().get());
   }
 
+
+  /*---------------- view functions ----------------*/
 
   private void drawInit() throws IOException {
     playerPane = new GridPane[ViewConstant.CELL_ROW_CNT.getInt()][ViewConstant.CELL_COL_CNT.getInt()];
@@ -235,7 +244,7 @@ public class GameController implements Initializable {
     }
   }
 
-  private void drawBeforeChangePlayer() {
+  private void drawBeforeChangeTurn() {
     try {
       drawPlayer(game.getCurrentPlayer());
       cmdTfd.setText(null);

@@ -17,6 +17,14 @@ public class GameModel {
   private Map<Integer, PlayerModel> players;
   private BoardModel board;
 
+  /**
+   * Create game
+   *
+   * @param playerCnt   player numbers
+   * @param mapFilePath start coord position
+   * @param startCoord
+   * @throws IOException
+   */
   public GameModel(Integer playerCnt, String mapFilePath, Coord startCoord) throws IOException {
     this.playerCnt = playerCnt;
 
@@ -30,10 +38,13 @@ public class GameModel {
   }
 
   public void movePlayer(String cmd, Integer cmdLength) throws Exception {
+    // convert command to uppercase
     if (cmd != null) cmd = cmd.toUpperCase();
 
+    // when command is not u/d/r/l
     if (cmd == null || cmd.equals("") || !cmd.replace("R", "").replace("L", "").replace("D", "").replace("U", "").equals(""))
       throw new Exception("command");
+    // when command length is not valid
     if (cmd.length() != cmdLength) throw new Exception("length");
 
 
@@ -41,23 +52,31 @@ public class GameModel {
     Coord coordCp = new Coord(player.getCoord()), coord = player.getCoord();
     Integer turnCp = turn;
 
+    // check command's validation
     for (Character c : cmd.toCharArray()) {
 
+      // if movement is in cell
       if (coord.isValid(c) && board.getCell(coord, c) != null) {
-        if (playerCnt > PlayerModel.leftPlayerCnt &&
-            board.getCellPriority(coord, c) < board.getCellPriority(coord)) {
+
+        // if finished player exist and move backward
+        if (playerCnt > PlayerModel.leftPlayerCnt
+            && board.getCellPriority(coord, c) < board.getCellPriority(coord)) {
           backup(player, coordCp, turnCp);
           throw new Exception("direction");
         }
+
         coord.move(c);
+
         if (board.getCell(coord) == BRIDGE) {
           player.addBridgeCard();
           coord.move('R');
         }
+
       } else {
         backup(player, coordCp, turnCp);
         throw new Exception("outofboard");
       }
+
       if (board.getCell(coord) == END) {
         player.finish();
         break;
@@ -93,12 +112,15 @@ public class GameModel {
     return dice = new Random().nextInt(6) + 1;
   }
 
-
+  /**
+   * winner can be more than 2
+   * @return winner's number
+   */
   public List<Integer> getWinners() {
     List<Integer> winners = new ArrayList<>();
     winners.add(1);
     Integer max = -1;
-    for (PlayerModel player :  players.values())
+    for (PlayerModel player : players.values())
       if (player.getScore() >= max) {
         if (player.getScore() != max) {
           winners.clear();
@@ -108,7 +130,6 @@ public class GameModel {
       }
     return winners;
   }
-
 
   public static String[] getMapFileNames() {
     File mapDir = new File(String.format("%s/map", STATIC_PATH.getStr()));

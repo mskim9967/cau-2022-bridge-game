@@ -10,8 +10,8 @@
         <VBox alignment="CENTER" spacing="10.0" prefHeight="200.0" prefWidth="300.0">
             <children>
                 <Label style="-fx-font-size: 40">Bridge Game</Label>
-                <Button fx:id="gameStartBtn" text="New Game" />
-                <Button fx:id="exitBtn" text="Exit" />
+                <Button fx:id="gameStartBtn" text="New Game"/>
+                <Button fx:id="exitBtn" text="Exit"/>
             </children>
         </VBox>
 

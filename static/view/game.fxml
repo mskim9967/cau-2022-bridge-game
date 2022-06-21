@@ -32,7 +32,7 @@
 
                 <VBox alignment="CENTER" spacing="10">
                     <children>
-                        <ImageView fx:id="diceView" fitWidth="140" fitHeight="140" />
+                        <ImageView fx:id="diceView" fitWidth="140" fitHeight="140"/>
                         <Button fx:id="rollDiceBtn" text="Roll!"/>
                     </children>
                 </VBox>

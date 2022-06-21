@@ -22,7 +22,6 @@ public class GameController {
     Integer playerCnt = 0;
     String mapFilePath, line;
     Coord startCoord = new Coord(0, 3);
-
     System.out.println();
     do {
       System.out.print("How many players? (2~4) : ");

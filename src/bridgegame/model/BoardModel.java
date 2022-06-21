@@ -17,6 +17,14 @@ public class BoardModel {
   private Integer[][] priority;
   private Integer priorityCnt = 0;
 
+
+  /**
+   * Create board by file
+   *
+   * @param startCoord  start coord position
+   * @param mapFilePath static map file path
+   * @throws IOException
+   */
   public BoardModel(Coord startCoord, String mapFilePath) throws IOException {
 
     board = new BoardConstant[CELL_ROW_CNT.getInt()][CELL_COL_CNT.getInt()];
@@ -29,26 +37,28 @@ public class BoardModel {
     Character nextDir;
     boolean isFirstLine = true;
 
+    // line parsing
     while ((line = bufReader.readLine()) != null) {
 
-      if(isFirstLine) line = '$' + line.substring(1);
+      if (isFirstLine) line = '$' + line.substring(1);
       isFirstLine = false;
 
       setCell(coord, BoardConstant.get(line.charAt(0)));
 
       // make bridge
-      if(board[coord.y][coord.x] == BRIDGE_START) {
+      if (board[coord.y][coord.x] == BRIDGE_START) {
         Coord bridgeCoord = new Coord(coord);
-        if(bridgeCoord.isValid('R') && getCell(bridgeCoord, 'R') == null)
+        if (bridgeCoord.isValid('R') && getCell(bridgeCoord, 'R') == null)
           bridgeCoord.move('R');
         setCell(bridgeCoord, BRIDGE);
       }
 
       if (line.charAt(0) == 'E') break;
       else {
-        if(coord.isValid(line.charAt(2)) && getCell(coord, line.charAt(2)) == null)
+        // decide next direction
+        if (coord.isValid(line.charAt(2)) && getCell(coord, line.charAt(2)) == null)
           nextDir = line.charAt(2);
-        else if(coord.isValid(line.charAt(4)) && getCell(coord, line.charAt(4)) == null)
+        else if (coord.isValid(line.charAt(4)) && getCell(coord, line.charAt(4)) == null)
           nextDir = line.charAt(4);
         else
           throw new IOException("File Format Error");
@@ -70,6 +80,12 @@ public class BoardModel {
     return board[y][x];
   }
 
+  /**
+   * get cell's value when next movement is c
+   * @param coord current coord
+   * @param c next movement
+   * @return next movement's cell
+   */
   public BoardConstant getCell(Coord coord, Character c) {
     Coord next = new Coord(coord.x, coord.y);
     next.move(c);
@@ -80,6 +96,12 @@ public class BoardModel {
     return priority[coord.y][coord.x];
   }
 
+  /**
+   * get cell's priority when next movement is c
+   * @param coord current coord
+   * @param c next movement
+   * @return next movement's priority
+   */
   public Integer getCellPriority(Coord coord, Character c) {
     Coord next = new Coord(coord.x, coord.y);
     next.move(c);
